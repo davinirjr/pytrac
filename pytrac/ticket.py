@@ -9,8 +9,7 @@ class Ticket(object):
         self.api = self.server.ticket
 
     def search_raw(self, query):
-        result = self.api.query(query)
-        print result
+        return self.api.query(query)
 
     def search(self, summary=None, owner=None, status=None):
         query = ''
@@ -23,16 +22,14 @@ class Ticket(object):
         if query == '':
             raise Exception("Query empty!")
         query = query.rstrip('&')
-        print '"%s"' % query
-        result = self.api.query(query)
-        print result
+        return self.api.query(query)
 
-#    def search(self, query):
+    # id, summary, owner, ...
+    def info(self):
+        pass
 
-#
-#def update():
-#    print "dummy"
-#
-#
-#def create():
-#    print "dummy"
+    def update(self):
+        pass
+
+    def create(self):
+        pass
