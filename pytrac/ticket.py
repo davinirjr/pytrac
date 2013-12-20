@@ -1,8 +1,7 @@
-#!/usr/bin/env python
 import xmlrpclib
 
 
-class Ticket():
+class Ticket(Object):
 
     def __init__(self, user, host, password):
         self.url = 'https://%s:%s@%s/trac/login/xmlrpc' % (user, password, host)
