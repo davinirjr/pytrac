@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Jimdo/pytrac.png?branch=initial)](https://travis-ci.org/Jimdo/pytrac)
 pytrac
 ======
 
