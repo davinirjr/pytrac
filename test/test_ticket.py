@@ -3,9 +3,6 @@ from mock import Mock
 import sys
 import os
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.abspath(os.path.join(BASE_DIR, '../')))
-
 from pytrac import Ticket
 
 
