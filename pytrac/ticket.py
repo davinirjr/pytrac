@@ -1,12 +1,7 @@
-import xmlrpclib
-
-
 class Ticket(object):
 
-    def __init__(self, user, host, password):
-        self.url = 'https://%s:%s@%s/trac/login/xmlrpc' % (user, password, host)
-        self.server = xmlrpclib.ServerProxy(self.url)
-        self.api = self.server.ticket
+    def __init__(self, server):
+        self.api = server.ticket
 
     def search_raw(self, query):
         return self.api.query(query)
