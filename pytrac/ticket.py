@@ -36,8 +36,28 @@ class Ticket(object):
         ticket_data = self.api.get(ticket_id)
         return self._parse_ticket_info(ticket_data)
 
-    def update(self):
-        pass
+    def update(self, ticket_id, comment='', action='leave', notify=False):
+        '''update the ticket with XXX'''
+        ticket_info = self.info(ticket_id)
+
+        attributes = {
+            'action': action,
+            '_ts': ticket_info['_ts'],
+        }
+
+        # catch exception (eg: set ticket to next although it is already at
+        # next)
+        result = self.api.update(
+            ticket_info['id'],
+            comment,
+            attributes,
+            notify,
+        )
+        return self._parse_ticket_info(result)
+
+    def comment(self, ticket_id, comment):
+        '''add comment to ticket'''
+        return self.update(ticket_id, comment)
 
     def create(self):
         pass
