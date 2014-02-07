@@ -19,9 +19,22 @@ class Ticket(object):
         query = query.rstrip('&')
         return self.api.query(query)
 
+    def _parse_ticket_info(self, ticket_data):
+        '''make nice dict out of ticket info'''
+        ticket_info = {
+            'id': ticket_data[0],
+            'created': ticket_data[1],  # this is xmlrpc.DateTime!
+            'modified': ticket_data[2],
+        }
+        ticket_info.update(ticket_data[3])
+
+        return ticket_info
+
     # id, summary, owner, ...
-    def info(self):
-        pass
+    def info(self, ticket_id):
+        '''return info about specfic ticket'''
+        ticket_data = self.api.get(ticket_id)
+        return self._parse_ticket_info(ticket_data)
 
     def update(self):
         pass
