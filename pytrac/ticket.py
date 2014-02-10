@@ -36,7 +36,7 @@ class Ticket(object):
         ticket_data = self.api.get(ticket_id)
         return self._parse_ticket_info(ticket_data)
 
-    def update(self, ticket_id, comment='', action='leave', notify=False):
+    def update(self, ticket_id, comment='', attrs=None, action='leave', notify=False):
         '''update the ticket with XXX'''
         ticket_info = self.info(ticket_id)
 
@@ -44,6 +44,8 @@ class Ticket(object):
             'action': action,
             '_ts': ticket_info['_ts'],
         }
+        if attrs is not None:
+            attributes.update(attrs)
 
         # catch exception (eg: set ticket to next although it is already at
         # next)
