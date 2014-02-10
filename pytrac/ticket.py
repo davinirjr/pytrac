@@ -6,8 +6,8 @@ class Ticket(object):
     def search_raw(self, query):
         return self.api.query(query)
 
-    def search(self, summary=None, owner=None, status=None):
-        query = ''
+    def search(self, summary=None, owner=None, status=None, max=0):
+        query = 'max=%s&' % max
         if summary:
             query += "summary~=%s&" % summary
         if owner:
