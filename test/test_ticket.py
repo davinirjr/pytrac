@@ -14,7 +14,7 @@ class TestTicket(unittest.TestCase):
 
     def testSearchWithAllParams(self):
         self.ticket.search(summary='test_summary', owner='someowner', status='new')
-        self.ticket.api.query.assert_called_with('summary~=test_summary&owner=someowner&status=new')
+        self.ticket.api.query.assert_called_with('max=0&summary~=test_summary&owner=someowner&status=new')
 
 
 if __name__ == '__main__':
