@@ -2,7 +2,7 @@ import xmlrpclib
 from .ticket import Ticket
 
 
-def connect(user, host, password):
+def connect(host, user, password):
     url = 'https://%s:%s@%s/trac/login/xmlrpc' % (user, password, host)
     server = xmlrpclib.ServerProxy(url)
     return Ticket(server)
