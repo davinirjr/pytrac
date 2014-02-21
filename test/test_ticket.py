@@ -24,22 +24,26 @@ class TestUpdateTicket(unittest.TestCase):
 
     def setUp(self):
         server = Mock()
-        timestamp = datetime.datetime.now()
+        self.timestamp = datetime.datetime.now()
         server.ticket.get.return_value = [self.ticket_id,
-                                          timestamp,
-                                          timestamp,
-                                          {'_ts': timestamp,
+                                          self.timestamp,
+                                          self.timestamp,
+                                          {'_ts': self.timestamp,
                                            'action': 'leave'}]
         server.ticket.update.return_value = [self.ticket_id,
-                                             timestamp,
-                                             timestamp,
-                                             {'_ts': timestamp,
+                                             self.timestamp,
+                                             self.timestamp,
+                                             {'_ts': self.timestamp,
                                               'action': 'leave'}]
         self.ticket = Ticket(server)
 
     def testComment(self):
         self.ticket.comment(self.ticket_id, "some comment")
-        self.ticket.api.get.assert_called_with(1)
+        self.ticket.api.update.assert_called_with(
+            self.ticket_id,
+            comment="some comment",
+            attrs={'action': 'leave', '_ts': self.timestamp},
+            notify=True)
 
 
 if __name__ == '__main__':

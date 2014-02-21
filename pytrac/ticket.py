@@ -1,7 +1,8 @@
 class Ticket(object):
 
-    def __init__(self, server):
+    def __init__(self, server, notify=True):
         self.api = server.ticket
+        self.notify = notify
 
     def search_raw(self, query):
         return self.api.query(query)
@@ -36,7 +37,7 @@ class Ticket(object):
         ticket_data = self.api.get(ticket_id)
         return self._parse_ticket_info(ticket_data)
 
-    def update(self, ticket_id, comment='', attrs=None, action='leave', notify=False):
+    def update(self, ticket_id, comment='', attrs=None, action='leave'):
         '''update the ticket with XXX'''
         ticket_info = self.info(ticket_id)
 
@@ -51,9 +52,9 @@ class Ticket(object):
         # next)
         result = self.api.update(
             ticket_info['id'],
-            comment,
-            attributes,
-            notify,
+            comment=comment,
+            attrs=attributes,
+            notify=self.notify,
         )
         return self._parse_ticket_info(result)
 
