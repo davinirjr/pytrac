@@ -1,4 +1,7 @@
-|Build Status| pytrac ======
+pytrac
+======
+
+|Build Status|
 
 library for managing TRAC tickets with python
 
