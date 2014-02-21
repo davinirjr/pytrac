@@ -1,7 +1,11 @@
+import os
+import sys
+
+pytrac_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
+sys.path.insert(0, pytrac_root)
+
 import pytest
 from mock import Mock
-import sys
-import os
 import datetime
 
 from pytrac import Ticket
