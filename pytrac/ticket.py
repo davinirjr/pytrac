@@ -64,7 +64,7 @@ class Ticket(object):
 
     def close(self, ticket_id, comment, resolution='fixed'):
         '''close ticket with resolution <RESOLUTION>'''
-        self._check_resolution(ticket_id, 'resolve', resolution)
+        self._check_resolution(ticket_id, resolution)
         return self.update(ticket_id, comment, {
             'status': 'closed',
             'action': 'resolve',
