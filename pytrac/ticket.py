@@ -1,13 +1,14 @@
 class Ticket(object):
 
-    def __init__(self, server):
+    def __init__(self, server, notify=True):
         self.api = server.ticket
+        self.notify = notify
 
     def search_raw(self, query):
         return self.api.query(query)
 
-    def search(self, summary=None, owner=None, status=None):
-        query = ''
+    def search(self, summary=None, owner=None, status=None, max=0):
+        query = 'max=%s&' % max
         if summary:
             query += "summary~=%s&" % summary
         if owner:
@@ -36,7 +37,7 @@ class Ticket(object):
         ticket_data = self.api.get(ticket_id)
         return self._parse_ticket_info(ticket_data)
 
-    def update(self, ticket_id, comment='', action='leave', notify=False):
+    def update(self, ticket_id, comment='', attrs=None, action='leave'):
         '''update the ticket with XXX'''
         ticket_info = self.info(ticket_id)
 
@@ -44,14 +45,16 @@ class Ticket(object):
             'action': action,
             '_ts': ticket_info['_ts'],
         }
+        if attrs is not None:
+            attributes.update(attrs)
 
         # catch exception (eg: set ticket to next although it is already at
         # next)
         result = self.api.update(
             ticket_info['id'],
-            comment,
-            attributes,
-            notify,
+            comment=comment,
+            attrs=attributes,
+            notify=self.notify,
         )
         return self._parse_ticket_info(result)
 
