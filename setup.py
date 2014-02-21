@@ -1,6 +1,24 @@
 #!/usr/bin/env python
 
 from setuptools import setup, Command
+import sys
+
+
+class PyTest(Command):
+    description = 'Runs the test suite.'
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        import pytest
+        errno = pytest.main('test')
+        sys.exit(errno)
+
 
 class PyPandoc(Command):
     description = 'Generates the documentation in reStructuredText format.'
@@ -32,7 +50,7 @@ setup(name='pytrac',
       long_description=open('rst/README.rst').read() + '\n\n' +
                        open('rst/HISTORY.rst').read(),
       packages=['pytrac'],
-      tests_require=['mock'],
+      tests_require=['pytest', 'mock'],
       test_suite='test',
-      cmdclass={'doc': PyPandoc},
+      cmdclass={'test': PyTest, 'doc': PyPandoc},
       )
