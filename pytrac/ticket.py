@@ -8,7 +8,7 @@ class Ticket(object):
         return self.api.query(query)
 
     def search(self, summary=None, owner=None, status=None, max=0):
-        query = 'max=%s&' % max
+        query = ''
         if summary:
             query += "summary~=%s&" % summary
         if owner:
@@ -17,7 +17,7 @@ class Ticket(object):
             query += "status=%s&" % status
         if query == '':
             raise Exception("Query empty!")
-        query = query.rstrip('&')
+        query += 'max=%s' % max
         return self.api.query(query)
 
     def _parse_ticket_info(self, ticket_data):
