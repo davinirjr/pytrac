@@ -39,6 +39,11 @@ class TestUpdateTicket(object):
                                              self.timestamp,
                                              {'_ts': self.timestamp,
                                               'action': 'leave'}]
+        server.ticket.getActions.return_value = [
+            ['leave', 'leave', '.', []],
+            ['resolve', 'resolve', "The resolution will be set. Next status will be 'closed'.",
+                [['action_resolve_resolve_resolution', 'fixed',
+                    ['fixed', 'worksforme']]]]]
         self.ticket = Ticket(server)
 
     def testComment(self):
@@ -49,6 +54,16 @@ class TestUpdateTicket(object):
             attrs={'action': 'leave', '_ts': self.timestamp},
             notify=True)
 
+    def testClose(self):
+        self.ticket.close(self.ticket_id, "some comment")
+        self.ticket.api.update.assert_called_with(
+            self.ticket_id,
+            comment="some comment",
+            attrs={'action': 'resolve',
+                   '_ts': self.timestamp,
+                   'action_resolve_resolve_resolution': 'fixed',
+                   'status': 'closed'},
+            notify=True)
 
 if __name__ == '__main__':
     pytest.main(__file__)
