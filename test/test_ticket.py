@@ -1,15 +1,19 @@
-import unittest
-from mock import Mock
-import sys
 import os
+import sys
+
+pytrac_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
+sys.path.insert(0, pytrac_root)
+
+import pytest
+from mock import Mock
 import datetime
 
 from pytrac import Ticket
 
 
-class TestTicket(unittest.TestCase):
+class TestTicket(object):
 
-    def setUp(self):
+    def setup_class(self):
         server = Mock()
         self.ticket = Ticket(server)
 
@@ -18,11 +22,11 @@ class TestTicket(unittest.TestCase):
         self.ticket.api.query.assert_called_with('max=0&summary~=test_summary&owner=someowner&status=new')
 
 
-class TestUpdateTicket(unittest.TestCase):
+class TestUpdateTicket(object):
 
     ticket_id = 1
 
-    def setUp(self):
+    def setup_class(self):
         server = Mock()
         self.timestamp = datetime.datetime.now()
         server.ticket.get.return_value = [self.ticket_id,
@@ -47,4 +51,4 @@ class TestUpdateTicket(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    pytest.main(__file__)
