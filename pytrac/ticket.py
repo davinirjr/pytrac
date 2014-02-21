@@ -62,5 +62,25 @@ class Ticket(object):
         '''add comment to ticket'''
         return self.update(ticket_id, comment)
 
+    def close(self, ticket_id, comment, resolution='fixed'):
+        '''close ticket with resolution <RESOLUTION>'''
+        self._check_resolution(ticket_id, 'resolve', resolution)
+        return self.update(ticket_id, comment, {
+            'status': 'closed',
+            'action': 'resolve',
+            'action_resolve_resolve_resolution': resolution})
+
+    def _check_resolution(self, ticket_id, resolution):
+        '''check if the resolution is valid'''
+        # TODO: beautify me
+        for action, label, hints, input_fields in self.api.getActions(ticket_id):
+            if action == 'resolve':
+                for fields in input_fields:
+                    name, value, options = fields
+                    if resolution in options:
+                        return True
+        raise Exception('invalid resolution: ' + resolution)
+        return False
+
     def create(self):
         pass
