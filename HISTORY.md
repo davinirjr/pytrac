@@ -1,4 +1,7 @@
 History
 =======
 
-Add versions here.
+v0.1 (Mar 7 2014)
+----------------
+
+* initial release

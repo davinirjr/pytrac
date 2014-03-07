@@ -41,14 +41,14 @@ class PyPandoc(Command):
 
 
 setup(name='pytrac',
-      version='0.0.1',
-      author='Daniel Bonkowski',
-      author_email='bonko@jimdo.com',
+      version='0.1',
+      author='Daniel Bonkowski, Pirmin Fix',
+      author_email='bonko@jimdo.com, pirmin.fix@jimdo.com',
       url='https://github.com/Jimdo/pytrac',
       license='Apache',
       description='Library for managing TRAC tickets with Python',
       long_description=open('rst/README.rst').read() + '\n\n' +
-                       open('rst/HISTORY.rst').read(),
+          open('rst/HISTORY.rst').read(),
       packages=['pytrac'],
       tests_require=['pytest', 'mock'],
       test_suite='test',
