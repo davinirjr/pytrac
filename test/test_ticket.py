@@ -50,20 +50,20 @@ class TestUpdateTicket(object):
         self.ticket.comment(self.ticket_id, "some comment")
         self.ticket.api.update.assert_called_with(
             self.ticket_id,
-            comment="some comment",
-            attrs={'action': 'leave', '_ts': self.timestamp},
-            notify=True)
+            "some comment",
+            {'action': 'leave', '_ts': self.timestamp},
+            True)
 
     def testClose(self):
         self.ticket.close(self.ticket_id, "some comment")
         self.ticket.api.update.assert_called_with(
             self.ticket_id,
-            comment="some comment",
-            attrs={'action': 'resolve',
-                   '_ts': self.timestamp,
-                   'action_resolve_resolve_resolution': 'fixed',
-                   'status': 'closed'},
-            notify=True)
+            "some comment",
+            {'action': 'resolve',
+             '_ts': self.timestamp,
+             'action_resolve_resolve_resolution': 'fixed',
+             'status': 'closed'},
+            True)
 
 if __name__ == '__main__':
     pytest.main(__file__)
