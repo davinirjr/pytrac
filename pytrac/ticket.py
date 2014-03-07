@@ -31,9 +31,8 @@ class Ticket(object):
 
         return ticket_info
 
-    # id, summary, owner, ...
     def info(self, ticket_id):
-        '''return info about specfic ticket'''
+        '''return dictionary with info about specfic ticket'''
         ticket_data = self.api.get(ticket_id)
         return self._parse_ticket_info(ticket_data)
 
@@ -52,9 +51,9 @@ class Ticket(object):
         # next)
         result = self.api.update(
             ticket_info['id'],
-            comment=comment,
-            attrs=attributes,
-            notify=self.notify,
+            comment,
+            attributes,
+            self.notify,
         )
         return self._parse_ticket_info(result)
 
