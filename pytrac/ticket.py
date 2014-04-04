@@ -31,6 +31,24 @@ class Ticket(object):
 
         return ticket_info
 
+    def _get_field_by_name(self, fields, name):
+        for f in fields:
+            if f['name'] == name:
+                return f
+        raise Exception("invalid field name %s" % name)
+
+    def _validate_field(self, field, value):
+        '''check if field values are valid'''
+        field_list = self.api.getTicketFields()
+        field_struct = self._get_field_by_name(field_list, field)
+        try:
+            if value in field_struct['options']:
+                return True
+            else:
+                return False
+        except KeyError:
+            return True
+
     def info(self, ticket_id):
         '''return dictionary with info about specfic ticket'''
         ticket_data = self.api.get(ticket_id)
@@ -81,5 +99,23 @@ class Ticket(object):
         raise Exception('invalid resolution: ' + resolution)
         return False
 
-    def create(self):
-        pass
+    def create(self, summary, description, owner=None, milestone=None, priority=None, ticket_type=None, component=None, cc=None):
+        '''create a new ticket'''
+        attributes = {}
+        if owner:
+            attributes['owner'] = owner
+        if milestone:
+            attributes['milestone'] = milestone
+        if priority:
+            attributes['priority'] = priority
+        if ticket_type:
+            attributes['type'] = ticket_type
+        if component:
+            attributes['component'] = component
+        if cc:
+            attributes['cc'] = cc
+        for k, v in attributes.iteritems():
+            if not self._validate_field(k, v):
+                raise Exception('"%s" is no valid value for field "%s"' % (v, k))
+
+        return self.api.create(summary, description, attributes, self.notify)
