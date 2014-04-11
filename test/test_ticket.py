@@ -18,8 +18,8 @@ class TestTicket(object):
         self.ticket = Ticket(server)
 
     def testSearchWithAllParams(self):
-        self.ticket.search(summary='test_summary', owner='someowner', status='new')
-        self.ticket.api.query.assert_called_with('summary~=test_summary&owner=someowner&status=new&max=0')
+        self.ticket.search(summary='test_summary', owner='someowner', status='new', order='id', descending=True, max=10)
+        self.ticket.api.query.assert_called_with('summary~=test_summary&owner=someowner&status=new&order=id&desc=true&max=10')
 
 
 class TestUpdateTicket(object):
