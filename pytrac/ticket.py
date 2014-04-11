@@ -7,7 +7,8 @@ class Ticket(object):
     def search_raw(self, query):
         return self.api.query(query)
 
-    def search(self, summary=None, owner=None, status=None, max=0):
+    def search(self, summary=None, owner=None, status=None, order=None, descending=None, max=0):
+        ''' search for tickets, return ticket ids'''
         query = ''
         if summary:
             query += "summary~=%s&" % summary
@@ -15,6 +16,16 @@ class Ticket(object):
             query += "owner=%s&" % owner
         if status:
             query += "status=%s&" % status
+        if order:
+            query += "order=%s&" % order
+        if descending is not None:
+            if not isinstance(descending, bool):
+                raise Exception("descending has to be boolean")
+            if descending:
+                query += "desc=%s&" % "true"
+            else:
+                query += "desc=%s&" % "false"
+
         if query == '':
             raise Exception("Query empty!")
         query += 'max=%s' % max
