@@ -1,21 +1,26 @@
+'''Module for ticket handling'''
+
+
 class Ticket(object):
+    '''This represents the ticket API of Trac'''
 
     def __init__(self, server, notify=True):
         self.api = server.ticket
         self.notify = notify
 
     def search_raw(self, query):
+        ''' search for tickets by passing trac query string, return ticket ids'''
         return self.api.query(query)
 
-    def search(self, summary=None, owner=None, status=None, order=None, descending=None, max=0):
+    def search(self, summary=None, owner=None, status=None, order=None, descending=None, max=0, summary_operator='~=', status_operator='='):
         ''' search for tickets, return ticket ids'''
         query = ''
         if summary:
-            query += "summary~=%s&" % summary
+            query += "summary%s%s&" % (summary_operator, summary)
         if owner:
             query += "owner=%s&" % owner
         if status:
-            query += "status=%s&" % status
+            query += "status%s%s&" % (status_operator, status)
         if order:
             query += "order=%s&" % order
         if descending is not None:
