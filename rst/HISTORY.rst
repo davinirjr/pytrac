@@ -1,6 +1,12 @@
 History
 =======
 
+v0.3 (Aug 15 2014)
+------------------
+
+-  retry on failed network calls
+-  new requirement: backoff
+
 v0.2 (Apr 4 2014)
 -----------------
 
