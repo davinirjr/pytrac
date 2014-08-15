@@ -1,12 +1,26 @@
+import backoff
+import xmlrpclib
+
+
+class PytracException(Exception):
+    pass
+
+
 class Ticket(object):
 
     def __init__(self, server, notify=True):
         self.api = server.ticket
         self.notify = notify
 
+    @backoff.on_exception(backoff.expo,
+                          xmlrpclib.Fault,
+                          max_tries=3)
     def search_raw(self, query):
         return self.api.query(query)
 
+    @backoff.on_exception(backoff.expo,
+                          xmlrpclib.Fault,
+                          max_tries=3)
     def search(self, summary=None, owner=None, status=None, order=None, descending=None, max=0):
         ''' search for tickets, return ticket ids'''
         query = ''
@@ -20,14 +34,14 @@ class Ticket(object):
             query += "order=%s&" % order
         if descending is not None:
             if not isinstance(descending, bool):
-                raise Exception("descending has to be boolean")
+                raise PytracException("descending has to be boolean")
             if descending:
                 query += "desc=%s&" % "true"
             else:
                 query += "desc=%s&" % "false"
 
         if query == '':
-            raise Exception("Query empty!")
+            raise PytracException("Query empty!")
         query += 'max=%s' % max
         return self.api.query(query)
 
@@ -46,7 +60,7 @@ class Ticket(object):
         for f in fields:
             if f['name'] == name:
                 return f
-        raise Exception("invalid field name %s" % name)
+        raise PytracException("invalid field name %s" % name)
 
     def _validate_field(self, field, value):
         '''check if field values are valid'''
@@ -60,14 +74,27 @@ class Ticket(object):
         except KeyError:
             return True
 
+    @backoff.on_exception(backoff.expo,
+                          xmlrpclib.Fault,
+                          max_tries=3)
     def info(self, ticket_id):
         '''return dictionary with info about specfic ticket'''
+        return self._info(ticket_id)
+
+    def _info(self, ticket_id):
+        '''return dictionary with info about specfic ticket
+
+        use in functions that are already wrapped by backoff
+        '''
         ticket_data = self.api.get(ticket_id)
         return self._parse_ticket_info(ticket_data)
 
+    @backoff.on_exception(backoff.expo,
+                          xmlrpclib.Fault,
+                          max_tries=3)
     def update(self, ticket_id, comment='', attrs=None, action='leave'):
         '''update the ticket with XXX'''
-        ticket_info = self.info(ticket_id)
+        ticket_info = self._info(ticket_id)
 
         attributes = {
             'action': action,
@@ -98,6 +125,9 @@ class Ticket(object):
             'action': 'resolve',
             'action_resolve_resolve_resolution': resolution})
 
+    @backoff.on_exception(backoff.expo,
+                          xmlrpclib.Fault,
+                          max_tries=3)
     def _check_resolution(self, ticket_id, resolution):
         '''check if the resolution is valid'''
         # TODO: beautify me
@@ -107,9 +137,12 @@ class Ticket(object):
                     name, value, options = fields
                     if resolution in options:
                         return True
-        raise Exception('invalid resolution: ' + resolution)
+        raise PytracException('invalid resolution: ' + resolution)
         return False
 
+    @backoff.on_exception(backoff.expo,
+                          xmlrpclib.Fault,
+                          max_tries=3)
     def create(self, summary, description, owner=None, milestone=None, priority=None, ticket_type=None, component=None, cc=None):
         '''create a new ticket'''
         attributes = {}
@@ -127,6 +160,6 @@ class Ticket(object):
             attributes['cc'] = cc
         for k, v in attributes.iteritems():
             if not self._validate_field(k, v):
-                raise Exception('"%s" is no valid value for field "%s"' % (v, k))
+                raise PytracException('"%s" is no valid value for field "%s"' % (v, k))
 
         return self.api.create(summary, description, attributes, self.notify)
