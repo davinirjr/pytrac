@@ -53,5 +53,5 @@ setup(name='pytrac',
       tests_require=['pytest', 'mock'],
       test_suite='test',
       cmdclass={'test': PyTest, 'doc': PyPandoc},
-      install_requires=['backoff'],
+      install_requires=['backoff >= 1.0.4'],
       )
