@@ -29,7 +29,13 @@ class Ticket(object):
         if owner:
             query += "owner=%s&" % owner
         if status:
-            query += "status=%s&" % status
+            # We're not duck typing as strings are iterable, but we don't want
+            # to iterate over a string here, only over iterables, so let's
+            # check that first
+            if type(status) == str:
+                query += "status=%s&" % status
+            else:
+                query += "status=%s&" % '|'.join(status)
         if ticket_type:
             query += "type=%s&" % ticket_type
         if order:
