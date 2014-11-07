@@ -1,6 +1,12 @@
 import os
 import sys
-import xmlrpclib
+
+if sys.version_info[0] == 2:
+    import xmlrpclib
+elif sys.version_info[0] > 2:
+    import xmlrpc.client as xmlrpclib
+else:
+    print("You're using an unknown python version")
 
 pytrac_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
 sys.path.insert(0, pytrac_root)
