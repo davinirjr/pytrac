@@ -22,7 +22,18 @@ class Ticket(object):
                           xmlrpclib.Fault,
                           max_tries=3)
     def search(self, summary=None, owner=None, status=None, order=None, ticket_type=None, descending=None, max=0):
-        ''' search for tickets, return ticket ids'''
+        ''' search for tickets, return ticket ids
+
+        Args:
+            - summary (string, optional): ticket summary
+            - owner (string, optional): owner of the ticket
+            - status (string or list of strings, optional): status of the ticket
+            - order (string, optional): field name for ordering
+            - descending (boolean, optional): if you want to order descending
+              or not
+            - max (int, default 0): maximum number of items in the reurned
+              list
+        '''
         query = ''
         if summary:
             query += "summary~=%s&" % summary
