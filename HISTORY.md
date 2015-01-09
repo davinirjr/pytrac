@@ -1,6 +1,11 @@
 History
 =======
 
+v0.4 (Jan 09 2015)
+----------------
+
+* make tickets searchable by type
+
 v0.3 (Aug 15 2014)
 ----------------
 

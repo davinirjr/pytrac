@@ -41,7 +41,7 @@ class PyPandoc(Command):
 
 
 setup(name='pytrac',
-      version='0.3',
+      version='0.4',
       author='Daniel Bonkowski, Pirmin Fix',
       author_email='bonko@jimdo.com, pirmin.fix@jimdo.com',
       url='https://github.com/Jimdo/pytrac',
