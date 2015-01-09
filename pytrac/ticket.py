@@ -21,7 +21,7 @@ class Ticket(object):
     @backoff.on_exception(backoff.expo,
                           xmlrpclib.Fault,
                           max_tries=3)
-    def search(self, summary=None, owner=None, status=None, order=None, descending=None, max=0):
+    def search(self, summary=None, owner=None, status=None, order=None, ticket_type=None, descending=None, max=0):
         ''' search for tickets, return ticket ids'''
         query = ''
         if summary:
@@ -30,6 +30,8 @@ class Ticket(object):
             query += "owner=%s&" % owner
         if status:
             query += "status=%s&" % status
+        if ticket_type:
+            query += "type=%s&" % ticket_type
         if order:
             query += "order=%s&" % order
         if descending is not None:
