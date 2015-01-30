@@ -22,6 +22,21 @@ class TestTicket(object):
         self.ticket.search(summary='test_summary', owner='someowner', status='new', ticket_type='Task', order='id', descending=True, max=10)
         self.ticket.api.query.assert_called_with('summary~=test_summary&owner=someowner&status=new&type=Task&order=id&desc=true&max=10')
 
+    def testSearchWithStatusList(self):
+        '''search for tickets specifying several possible statuses'''
+
+        self.ticket.search(
+            summary='test_summary',
+            owner='someowner',
+            status=['new', 'next', 'doing'],
+        )
+
+        querystring = 'summary~=test_summary'\
+            '&owner=someowner'\
+            '&status=new|next|doing'\
+            '&max=0'
+        self.ticket.api.query.assert_called_with(querystring)
+
 
 class TestUpdateTicket(object):
 
